@@ -1,0 +1,126 @@
+You are developing a Bank Account Management System in Python.
+
+A bank has different types of accounts:
+
+Savings Account
+Current Account
+
+Every account has:
+
+account_number
+holder_name
+balance
+Requirements
+Create a parent class called BankAccount.
+Create SavingsAccount and CurrentAccount as child classes.
+The BankAccount class should have methods:
+deposit(amount)
+withdraw(amount)
+display_balance()
+A Savings Account should allow withdrawal only if sufficient balance is available.
+A Current Account should allow withdrawal even when the balance is insufficient, up to a certain overdraft limit.
+The withdrawal behavior should be different for Savings and Current accounts.
+Account details should not be directly accessible from outside the class. Provide appropriate methods to access/update them.
+🎯 Your task
+
+Design the Python program using OOP concepts.
+
+Try to identify which OOP concepts are required before writing the code.
+
+Think about:
+
+Class & Object
+Inheritance
+Encapsulation
+Method Overriding / Polymorphism
+Constructor
+Example interaction
+Account Holder: Preetha
+Account Type: Savings
+Initial Balance: 10000
+
+Deposit: 2000
+Balance: 12000
+
+Withdraw: 5000
+Withdrawal successful
+
+Current Balance: 7000
+
+For a Current Account:
+
+Account Holder: Harshitha
+Account Type: Current
+Initial Balance: 5000
+Overdraft Limit: 3000
+
+Withdraw: 7000
+Withdrawal successful
+
+Current Balance: -2000
+
+
+class Bank:
+    def __init__(self,account_number,holder_name,balance):
+        self.account_number = account_number
+        self.holder_name = holder_name
+        self.balance = balance
+    def deposit(self,amount):
+        self.balance = self.balance + amount
+        print('deposit:',amount)
+        print('balance:',self.balance)
+    def withdraw(self,amount):
+        pass
+    def check_balance(self):
+        print(f'current balance:{self.balance}')
+    def display(self):
+        print(f'account number:{self.account_number}')
+        print(f'holder_name:{self.holder_name}')
+        print(f'initial_balance:{self.balance}')
+class SavingsAccount(Bank):
+    def __init__(self,account_number,account_type,holder_name,balance,):
+        self.account_type = account_type
+        super().__init__(account_number,holder_name,balance)
+    def withdraw(self,amount):
+        if amount<=self.balance:
+            self.balance = self.balance - amount
+            print('withdraw:',amount)
+            print('withdrawal successful')
+            print('balance:',self.balance)
+        else:
+            raise ValueError('Insufficient Balance')
+    def display(self):
+        print(f'account_type:{self.account_type}')
+        super().display()
+
+class CurrentAccount(Bank):
+    def __init__(self,account_number,account_type,holder_name,balance):
+        self.account_type = account_type
+        super().__init__(account_number,holder_name,balance)
+    def withdraw(self,amount,overdraft_limit=3000):
+        if amount <= self.balance + overdraft_limit:
+            self.balance = self.balance - amount
+            print('withdraw:', amount)
+            print('withdrawal successful')
+            print('balance:',self.balance)
+        else:
+            print('Withdrawal failed')
+            print('Overdraft limit exceeded')
+
+    def display(self):
+        print(f'account_type:{self.account_type}')
+        super().display()
+s=SavingsAccount(12345678098765,'Saving','Preetha',50000)
+s.display()
+s.deposit(10000)
+s.check_balance()
+s.withdraw(1000)
+s.check_balance()
+s.withdraw(70000)
+
+c=CurrentAccount(9645637654563,'current','harshitha',30000)
+c.display()
+c.deposit(10000)
+c.check_balance()
+c.withdraw(1000)
+c.withdraw(41000)
